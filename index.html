@@ -13,34 +13,64 @@
         margin: 0;
         padding: 0;
       }
-      /* Custom scrollbar for a cleaner look */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+      /* Стили для начального экрана загрузки (пока грузится JS) */
+      #initial-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #0b1120;
+        color: white;
       }
-      ::-webkit-scrollbar-track {
-        background: transparent;
+      .pulse-core {
+        width: 60px;
+        height: 60px;
+        background: #3b82f6;
+        border-radius: 16px;
+        animation: pulse-animation 2s infinite ease-in-out;
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
       }
-      ::-webkit-scrollbar-thumb {
-        background: rgba(156, 163, 175, 0.3);
-        border-radius: 4px;
+      @keyframes pulse-animation {
+        0% { transform: scale(0.95); opacity: 0.5; }
+        50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+        100% { transform: scale(0.95); opacity: 0.5; }
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(156, 163, 175, 0.5);
+      .loading-text {
+        margin-top: 24px;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 500;
+        opacity: 0.8;
       }
+      
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.3); border-radius: 4px; }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "recharts": "https://esm.sh/recharts@^3.6.0"
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
-</head>
+    <!-- Подключаем точку входа как ES модуль -->
+    <script type="module" src="index.tsx"></script>
+  </head>
   <body class="bg-[#f8f9fb] dark:bg-[#0f172a] text-[#1e293b] dark:text-[#f1f5f9] transition-colors duration-300">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Этот блок исчезнет, как только React загрузится -->
+      <div id="initial-loader">
+        <div class="pulse-core"></div>
+        <div class="loading-text">Инициализация системы...</div>
+      </div>
+    </div>
   </body>
 </html>
