@@ -22,11 +22,14 @@ const Charts: React.FC<ChartsProps> = ({ filteredMarks, filteredScores }) => {
       m5 += (m.mark5 * m.participants) / 100;
     });
 
+    // Fix: Helper function to safely calculate percentages and resolve arithmetic operation errors
+    const getPercentage = (val: number) => totalP > 0 ? Number(((val / totalP) * 100).toFixed(2)) : 0;
+
     return [
-      { name: '2', value: Number(((m2 / totalP) * 100).toFixed(2)), color: '#ef4444' },
-      { name: '3', value: Number(((m3 / totalP) * 100).toFixed(2)), color: '#f59e0b' },
-      { name: '4', value: Number(((m4 / totalP) * 100).toFixed(2)), color: '#10b981' },
-      { name: '5', value: Number(((m5 / totalP) * 100).toFixed(2)), color: '#3b82f6' }
+      { name: '2', value: getPercentage(m2), color: '#ef4444' },
+      { name: '3', value: getPercentage(m3), color: '#f59e0b' },
+      { name: '4', value: getPercentage(m4), color: '#10b981' },
+      { name: '5', value: getPercentage(m5), color: '#3b82f6' }
     ];
   }, [filteredMarks]);
 
@@ -48,9 +51,13 @@ const Charts: React.FC<ChartsProps> = ({ filteredMarks, filteredScores }) => {
     const maxScore = Math.max(...Object.keys(scoreMap).map(Number), 0);
     const result = [];
     for (let i = 0; i <= maxScore; i++) {
+      // Fix: Resolve "The left-hand side of an arithmetic operation..." by clarifying the calculation steps
+      const currentScoreCount = scoreMap[i] || 0;
+      const calculatedPercentage = totalP > 0 ? (currentScoreCount / totalP) * 100 : 0;
+      
       result.push({
         score: i,
-        percentage: Number(((scoreMap[i] || 0) / totalP * 100).toFixed(2))
+        percentage: Number(calculatedPercentage.toFixed(2))
       });
     }
     return result;
